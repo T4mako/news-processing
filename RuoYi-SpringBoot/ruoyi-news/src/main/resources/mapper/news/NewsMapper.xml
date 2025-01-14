@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.news.mapper.NewsMapper">
+   <select id="getAll" resultType="News">
+      select * from news
+   </select>
+
+   <insert id="insert" parameterType="News">
+      insert into news(title,content,time,update_time,category,push_name,click_num)
+      values(#{title},#{content},#{time},#{update_time},#{category},#{push_name},#{click_num})
+   </insert>
+
+   <delete id="delete">
+      delete from news where id=#{id}
+   </delete>
+
+   <select id="findById" resultType="News">
+      select * from news where id=#{id}
+   </select>
+
+   <select id="findAll" resultType="NewsTable">
+      select * from news
+   </select>
+   <update id="update" parameterType="News">
+      update news set title=#{title},content=#{content},time=#{time},update_time=#{update_time},category=#{category},push_name=#{push_name},click_num=#{click_num} where id=#{id}
+   </update>
+</mapper>
