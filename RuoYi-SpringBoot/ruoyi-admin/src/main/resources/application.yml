@@ -127,3 +127,10 @@ xss:
   excludes: /system/notice
   # 匹配链接
   urlPatterns: /system/*,/monitor/*,/tool/*
+
+hadoop:
+  hdfs-url: hdfs://localhost:9000
+  hdfs-dir: /news
+  local-dir: E:\_毕设工厂\基于Hadoop的新闻数据处理与热点分析系统设计与实现\THU数据集\THUCNews
+
+
