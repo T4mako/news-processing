@@ -15,7 +15,7 @@
           <template #default="scope" >
             <el-button size="small" @click="findDetial(scope.row)">修改</el-button>
             <el-button size="small" type="danger" @click="deleteNews(scope.row)">删除</el-button>
-            <el-button size="small" type="primary" >查看</el-button>
+            <el-button size="small" type="primary" @click="findD(scope.row)">查看</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -153,6 +153,15 @@ export default {
             message: '修改失败',
             type: 'error'
           });
+        }
+      })
+    },
+    //跳转到新闻详情页面
+    findD(row){
+      this.$router.push({
+        path: '/news_data',
+        query: {
+          id: row.id
         }
       })
     },

@@ -44,6 +44,8 @@ import ImagePreview from "@/components/ImagePreview"
 import DictTag from '@/components/DictTag'
 
 import "@/assets/fonts/fonts.css"
+import "@/assets/fonts/font2.css"
+
 
 const app = createApp(App)
 
