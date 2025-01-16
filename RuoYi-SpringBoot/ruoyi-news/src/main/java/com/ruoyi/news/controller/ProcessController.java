@@ -60,20 +60,23 @@ public class ProcessController {
 
         // 过滤标点符号、空格、数字和停用词，并统计词频
         Map<String, Integer> wordFrequency = new HashMap<>();
-        Pattern punctuationPattern = Pattern.compile("\\p{P}"); // 匹配所有标点符号
+        Pattern punctuationPattern = Pattern.compile("[‘’“”，,。<>《》:{}\\[\\]()\\-\";!@#$%^&*]"); // 匹配包含指定标点符号的词
         Pattern digitPattern = Pattern.compile("\\d+"); // 匹配数字
+        Pattern decimalPattern = Pattern.compile("\\d+\\.\\d+"); // 匹配小数
 
         for (Word word : parseResult) {
             String wordText = word.getText();
-            // 过滤标点符号、空格、数字、停用词、空字符串和单个字符的词
-            if (!punctuationPattern.matcher(wordText).matches() &&
-                    !digitPattern.matcher(wordText).matches() &&
-                    !wordText.trim().isEmpty() &&
+            // 过滤
+            if (!punctuationPattern.matcher(wordText).find() && // 过滤包含‘’“”，的词
+                    !digitPattern.matcher(wordText).matches() &&  // 过滤全是数字的词
+                    !decimalPattern.matcher(wordText).matches() && // 过滤小数
+                    !wordText.trim().isEmpty() &&  // 过滤空字符串（全是空格的词）
                     wordText.length() > 1 &&  // 过滤掉单个字符的词
                     !stopwords.contains(wordText)) {
                 wordFrequency.put(wordText, wordFrequency.getOrDefault(wordText, 0) + 1);
             }
         }
+
 
         // 按词频从高到低排序
         Map<String, Integer> sortedWordFrequency = wordFrequency.entrySet()
