@@ -21,6 +21,7 @@
               :autosize="{ minRows: 2, maxRows: 15 }"
               type="textarea"
               placeholder="Please input"
+              readonly
           />
         </el-col>
       </el-row>

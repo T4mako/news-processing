@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <el-form ref="loginRef" :model="loginForm" :rules="loginRules" class="login-form">
-      <h3 class="title">若依后台管理系统</h3>
+      <h3 class="title">新闻数据管理系统</h3>
       <el-form-item prop="username">
         <el-input
           v-model="loginForm.username"
@@ -125,7 +125,7 @@ function handleLogin() {
           }
           return acc;
         }, {});
-        router.push({ path: redirect.value || "/", query: otherQueryParams });
+        router.push({ path: "/redirect/new_list", query: otherQueryParams });
       }).catch(() => {
         loading.value = false;
         // 重新获取验证码
@@ -168,7 +168,7 @@ getCookie();
   justify-content: center;
   align-items: center;
   height: 100%;
-  background-image: url("../assets/images/login-background.jpg");
+  background-image: url("../assets/images/background.png");
   background-size: cover;
 }
 .title {

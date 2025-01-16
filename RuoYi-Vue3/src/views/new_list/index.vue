@@ -13,8 +13,8 @@
             <el-input v-model="search" placeholder="输入关键字搜索" />
           </template>
           <template #default="scope" >
-            <el-button size="small" @click="findDetial(scope.row)">修改</el-button>
-            <el-button size="small" type="danger" @click="deleteNews(scope.row)">删除</el-button>
+            <el-button size="small" v-hasRole="['admin']" @click="findDetial(scope.row)">修改</el-button>
+            <el-button size="small" v-hasRole="['admin']" type="danger" @click="deleteNews(scope.row)">删除</el-button>
             <el-button size="small" type="primary" @click="findD(scope.row)">查看</el-button>
           </template>
         </el-table-column>
@@ -74,7 +74,7 @@ export default {
       search: '',
       filterTableData:[],
       currentPage: 1, // 当前页码
-      pageSize: 6, // 每页显示数量
+      pageSize: 8, // 每页显示数量
       total: 0, // 总数据量
       dialogVisible: false,
       formData: {
