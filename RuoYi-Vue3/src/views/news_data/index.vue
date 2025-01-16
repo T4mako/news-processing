@@ -37,7 +37,7 @@
       <el-col :span="12">
         <ShowBox>
           <div style="margin-top: 20px">
-          <Charts :options="chartOptions" /> <!--  词频统计柱状图-->
+          <Charts :options="barOptions" /> <!--  词频统计柱状图-->
           </div>
         </ShowBox>
       </el-col>
@@ -85,10 +85,50 @@ export default {
         content: '',
         click_num:'',
       },
-
       //关键字词云图
+      wordData: [
+        {name: 'web',value: 84},
+        {name: 'GIT',value: 5},
+        {name: 'CSS',value: 22},
+        {name: 'CSS',value: 11},
+        {name: '前端',value: 101},
+        {name: 'CSS',value: 33},
+        {name: 'Vue',value: 77},
+        {name: 'js',value: 98 },
+        {name: '互联网',value: 66},
+       {name: '插件',value: 55},
+      ],
+      wordOptions: {},
+      //词频统计柱状图
+      xData: ['点', '击', '柱', '子', '或', '者', '两', '指', '在', '触', '屏', '上', '滑', '动', '能', '够'],
+      barData:[220, 182, 191, 234, 290, 330, 310, 123, 442,  122, 133, 334, 198, 123, 125, 220],
+      barOptions: {},
+      //新闻分类饼状图
+      pieData: [
+        {value: 335, name: '体育'},
+        {value: 310, name: '时尚'},
+        {value: 234, name: '财经'},
+        {value: 135, name: '政治'},
+        {value: 1548, name: '国外'}
+      ],
+      pieOptions: {},
+      //新闻分类柱状图
+      newXData: ['体育', '时尚', '财经', '政治', '国外'],
+      newData:[220, 182, 191, 234, 290],
+      newOptions: {},
 
-      wordOptions: {
+    }
+  },
+  methods: {
+    getNews(){
+      getNewsById(this.id).then(response => {
+        console.log(response)
+        this.formData = response;
+      })
+    },
+    //获取关键词词云图信息
+    getWordData(wordData){
+      this.wordOptions={
         title: {
           text: '热点词',
         },
@@ -112,9 +152,7 @@ export default {
               minSize: 14
             },
             //全局文本样式
-
             textStyle: {
-
               normal: {
                 // Color可以是一个回调函数或一个颜色字符串
                 color: function () {
@@ -134,26 +172,14 @@ export default {
                 textShadowColor: "#409EFF",
               },
             },
-            data: [
-              {name: 'web',value: 84},
-              {name: 'GIT',value: 5},
-              {name: 'CSS',value: 22},
-              {name: 'CSS',value: 11},
-              {name: '前端',value: 101},
-              {name: 'CSS',value: 33},
-              {name: 'Vue',value: 77},
-              {name: 'js',value: 98 },
-              {name: '互联网',value: 66},
-              {name: '插件',value: 55},
-              {name: 'UI',value: 44},
-              {name: 'GIT',value: 5},
-            ],
-
+            data: wordData,
           },
         ],
-      },
-      //词频统计柱状图
-      chartOptions: {
+      }
+    },
+    //获取词频统计柱状图
+    getBarData(barData,xData){
+      this.barOptions={
         title: {
           text: '词频统计'
         },
@@ -163,7 +189,7 @@ export default {
         },
         xAxis: {
           type: 'category',
-          data: ['点', '击', '柱', '子', '或', '者', '两', '指', '在', '触', '屏', '上', '滑', '动', '能', '够'],
+          data: xData,
           axisLabel: {
             inside: true,
             color: '#fff'
@@ -209,12 +235,14 @@ export default {
                 ])
               }
             },
-            data: [220, 182, 191, 234, 290, 330, 310, 123, 442,  122, 133, 334, 198, 123, 125, 220]
+            data: barData,
           }
         ]
-      },
-      //新闻分类饼状图
-      pieOptions: {
+      }
+    },
+    //获取新闻分类饼状图信息
+    getPieData(pieData){
+      this.pieOptions= {
         title: {
           text: '新闻分类',
         },
@@ -250,18 +278,14 @@ export default {
             labelLine: {
               show: false
             },
-            data: [
-              { value: 1048, name: '体育' },
-              { value: 735, name: '时尚' },
-              { value: 580, name: '财经' },
-              { value: 484, name: '政治' },
-              { value: 300, name: '国外' }
-            ]
+            data: pieData,
           }
         ]
-      },
-      //新闻分类柱状图
-      newOptions: {
+      }
+    },
+    //获取新闻分类柱状图
+    getNewData(newData,newXData){
+      this.newOptions={
         title: {
           text: '新闻分类比例'
         },
@@ -271,7 +295,7 @@ export default {
         },
         xAxis: {
           type: 'category',
-          data: ['体育', '时尚', '财经', '政治', '国外'],
+          data: newXData,
           axisLabel: {
             inside: true,
             color: '#fff'
@@ -317,25 +341,24 @@ export default {
                 ])
               }
             },
-            data: [220, 182, 191, 234, 290]
+            data: newData
           }
         ]
-      },
-    }
-  },
-  methods: {
-    getNews(){
-      getNewsById(this.id).then(response => {
-        console.log(response)
-        this.formData = response;
-      })
+      }
     },
-
   },
   mounted() {
     this.id=this.$route.query.id;
     console.log(this.id)
     this.getNews();
+    //加载词云图数据
+    this.getWordData(this.wordData)
+    //加载词频统计柱状图数据
+    this.getBarData(this.barData,this.xData)
+    //加载新闻分类饼状图数据
+    this.getPieData(this.pieData)
+    //加载新闻分类柱状图数据
+    this.getNewData(this.newData,this.newXData)
   }
 }
 </script>
