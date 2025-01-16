@@ -65,6 +65,8 @@ spring:
     restart:
       # 热部署开关
       enabled: true
+      exclude:
+        scala/**,spark/**
   # redis 配置
   redis:
     # 地址
@@ -132,5 +134,6 @@ hadoop:
   hdfs-url: hdfs://localhost:9000
   hdfs-dir: /news
   local-dir: E:\_毕设工厂\基于Hadoop的新闻数据处理与热点分析系统设计与实现\THU数据集\THUCNews
+
 
 

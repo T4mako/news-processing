@@ -65,10 +65,11 @@ public class ProcessController {
 
         for (Word word : parseResult) {
             String wordText = word.getText();
-            // 过滤标点符号、空格、数字和停用词
+            // 过滤标点符号、空格、数字、停用词、空字符串和单个字符的词
             if (!punctuationPattern.matcher(wordText).matches() &&
                     !digitPattern.matcher(wordText).matches() &&
                     !wordText.trim().isEmpty() &&
+                    wordText.length() > 1 &&  // 过滤掉单个字符的词
                     !stopwords.contains(wordText)) {
                 wordFrequency.put(wordText, wordFrequency.getOrDefault(wordText, 0) + 1);
             }
