@@ -1,0 +1,11 @@
+.DS_Store
+data/cnews
+data/thucnews
+__pycache__
+cnn_keras.py
+.idea
+*.pyc
+checkpoints
+tensorboard
+.vscode
+/helper

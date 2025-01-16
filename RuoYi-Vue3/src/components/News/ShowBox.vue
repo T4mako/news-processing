@@ -10,7 +10,7 @@
 
 <style scoped lang="scss">
 .main {
-  //background-color: #F5F5F5;
+  // background-color: #F5F5F5;
   border-radius: 4px;
   width: 100%;
   padding: 15px;

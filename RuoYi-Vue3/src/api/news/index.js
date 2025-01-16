@@ -59,3 +59,25 @@ export function updateNews(a,b,c,d,e,f){
         }
     })
 }
+
+// 获取分类信息
+export function classify(t){
+    return request({
+        url: '/news/classify',
+        method: 'post',
+        data:{
+            text:t
+        }
+    })
+}
+
+// 根据分词
+export function tokenize(t){
+    return request({
+        url: '/news/tokenize',
+        method: 'post',
+        data:{
+            text:t
+        }
+    })
+}

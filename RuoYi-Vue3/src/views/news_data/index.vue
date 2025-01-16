@@ -2,26 +2,33 @@
   <div class="container_textarea">
     <ShowBox>
       <el-row :gutter="5">
-        <el-col :span="8" ><div class="text_font">新闻标题：{{formData.title}}</div></el-col>
-        <el-col :span="6"><div class="text_font">发布人：{{formData.push_name}}</div></el-col>
-        <el-col :span="6"><div class="text_font">发布时间：{{formData.time}}</div></el-col>
-        <el-col :span="4"><div class="text_font">点击数：{{formData.click_num}}</div></el-col>
+        <el-col :span="8">
+          <div class="text_font">新闻标题：{{ formData.title }}</div>
+        </el-col>
+        <el-col :span="6">
+          <div class="text_font">发布人：{{ formData.push_name }}</div>
+        </el-col>
+        <el-col :span="6">
+          <div class="text_font">发布时间：{{ formData.time }}</div>
+        </el-col>
+        <el-col :span="4">
+          <div class="text_font">点击数：{{ formData.click_num }}</div>
+        </el-col>
       </el-row>
 
       <el-row :gutter="20">
-        <el-col :span="8"><div class="text_font">新闻分类：{{formData.category}}</div></el-col>
+        <el-col :span="8">
+          <div class="text_font">新闻分类：{{ formData.category }}</div>
+        </el-col>
       </el-row>
 
       <el-row :gutter="10">
-        <el-col :span="1.5" ><div class="text_font">新闻内容:</div></el-col>
+        <el-col :span="1.5">
+          <div class="text_font">新闻内容:</div>
+        </el-col>
         <el-col :span="22">
-          <el-input
-              v-model="formData.content"
-              style="width: 100%"
-              :autosize="{ minRows: 2, maxRows: 15 }"
-              type="textarea"
-              placeholder="Please input"
-          />
+          <el-input v-model="formData.content" style="width: 100%" :autosize="{ minRows: 2, maxRows: 15 }"
+            type="textarea" placeholder="Please input" />
         </el-col>
       </el-row>
     </ShowBox>
@@ -37,7 +44,7 @@
       <el-col :span="12">
         <ShowBox>
           <div style="margin-top: 20px">
-          <Charts :options="barOptions" /> <!--  词频统计柱状图-->
+            <Charts :options="barOptions" /> <!--  词频统计柱状图-->
           </div>
         </ShowBox>
       </el-col>
@@ -65,70 +72,76 @@
 
 </template>
 
-<script >
+<script>
 import * as echarts from 'echarts'; // 正确引入 echarts
 import ShowBox from "../../components/News/ShowBox";
-import {getNewsById} from "../../api/news";
+import { getNewsById } from "../../api/news";
 import Charts from "../../components/News/Charts";
 import 'echarts-wordcloud';
+import { classify, tokenize } from "../../api/news";
 export default {
   name: "index",
-  components: {ShowBox,Charts},
+  components: { ShowBox, Charts },
   data() {
     return {
-      id:"",
+      id: "",
       formData: {
         title: '',
         push_name: '',
         time: '',
         category: '',
         content: '',
-        click_num:'',
+        click_num: '',
       },
       //关键字词云图
       wordData: [
-        {name: 'web',value: 84},
-        {name: 'GIT',value: 5},
-        {name: 'CSS',value: 22},
-        {name: 'CSS',value: 11},
-        {name: '前端',value: 101},
-        {name: 'CSS',value: 33},
-        {name: 'Vue',value: 77},
-        {name: 'js',value: 98 },
-        {name: '互联网',value: 66},
-       {name: '插件',value: 55},
+        { name: 'web', value: 84 },
+        { name: 'GIT', value: 5 },
+        { name: 'CSS', value: 22 },
+        { name: 'CSS', value: 11 },
+        { name: '前端', value: 101 },
+        { name: 'CSS', value: 33 },
+        { name: 'Vue', value: 77 },
+        { name: 'js', value: 98 },
+        { name: '互联网', value: 66 },
+        { name: '插件', value: 55 },
       ],
       wordOptions: {},
       //词频统计柱状图
       xData: ['点', '击', '柱', '子', '或', '者', '两', '指', '在', '触', '屏', '上', '滑', '动', '能', '够'],
-      barData:[220, 182, 191, 234, 290, 330, 310, 123, 442,  122, 133, 334, 198, 123, 125, 220],
+      barData: [220, 182, 191, 234, 290, 330, 310, 123, 442, 122, 133, 334, 198, 123, 125, 220],
       barOptions: {},
       //新闻分类饼状图
       pieData: [
-        {value: 335, name: '体育'},
-        {value: 310, name: '时尚'},
-        {value: 234, name: '财经'},
-        {value: 135, name: '政治'},
-        {value: 1548, name: '国外'}
+        { value: 335, name: '体育' },
+        { value: 310, name: '时尚' },
+        { value: 234, name: '财经' },
+        { value: 135, name: '政治' },
+        { value: 1548, name: '国外' }
       ],
       pieOptions: {},
       //新闻分类柱状图
       newXData: ['体育', '时尚', '财经', '政治', '国外'],
-      newData:[220, 182, 191, 234, 290],
+      newData: [220, 182, 191, 234, 290],
       newOptions: {},
 
     }
   },
   methods: {
-    getNews(){
-      getNewsById(this.id).then(response => {
-        console.log(response)
-        this.formData = response;
-      })
+    getNews() {
+      return new Promise((resolve, reject) => {
+        getNewsById(this.id).then(response => {
+          console.log(response);
+          this.formData = response;
+          resolve();  // 获取新闻数据成功后，resolve
+        }).catch(error => {
+          reject(error);  // 获取新闻数据失败时，reject
+        });
+      });
     },
     //获取关键词词云图信息
-    getWordData(wordData){
-      this.wordOptions={
+    getWordData(wordData) {
+      this.wordOptions = {
         title: {
           text: '热点词',
         },
@@ -178,8 +191,8 @@ export default {
       }
     },
     //获取词频统计柱状图
-    getBarData(barData,xData){
-      this.barOptions={
+    getBarData(barData, xData) {
+      this.barOptions = {
         title: {
           text: '词频统计'
         },
@@ -241,8 +254,8 @@ export default {
       }
     },
     //获取新闻分类饼状图信息
-    getPieData(pieData){
-      this.pieOptions= {
+    getPieData(pieData) {
+      this.pieOptions = {
         title: {
           text: '新闻分类',
         },
@@ -284,8 +297,8 @@ export default {
       }
     },
     //获取新闻分类柱状图
-    getNewData(newData,newXData){
-      this.newOptions={
+    getNewData(newData, newXData) {
+      this.newOptions = {
         title: {
           text: '新闻分类比例'
         },
@@ -346,19 +359,77 @@ export default {
         ]
       }
     },
+    newsClassify() {
+      return new Promise((resolve, reject) => {
+        classify(this.formData.content).then(response => {
+          if (response.code === 200) {
+            const data = response.data.probabilities;
+            // 动态获取标签和对应的概率值
+            const labels = Object.keys(data);  // 获取所有的分类标签            
+            const probabilities = Object.values(data);  // 获取所有的概率值
+            // 将数据赋值给 this.newData 和 this.newXData
+            this.newData = probabilities;
+            this.newXData = labels;
+            this.pieData = labels.map((label, index) => {
+              return { value: probabilities[index] * 100, name: label };
+            });
+            
+            resolve();  // 分类接口执行完成后，resolve
+          } else {
+            reject('分类接口出错');
+          }
+        }).catch(error => {
+          reject(error);  // 处理分类接口的错误
+        });
+      });
+    },
+
+    // 词频接口
+    newsTokenize() {
+      return new Promise((resolve, reject) => {
+        tokenize(this.formData.content).then(response => {
+          console.log(response);
+          
+          if (response.code === 200) {
+            const wordData = [];
+            const data = response.data;
+
+            const topWords = Object.entries(data).slice(0, 20);
+            topWords.forEach(([name,value ]) => {
+              wordData.push({ name,value });
+            });
+            this.xData = topWords.map(([name,value]) => name);
+            this.barData = topWords.map(([name,value]) => value);
+
+            this.wordData = wordData;  // 更新词云数据
+            resolve();  // 分词接口执行完成后，resolve
+          } else {
+            reject('分词接口出错');
+          }
+        }).catch(error => {
+          reject(error);  // 处理分词接口的错误
+        });
+      });
+    }
+
   },
   mounted() {
-    this.id=this.$route.query.id;
-    console.log(this.id)
-    this.getNews();
-    //加载词云图数据
-    this.getWordData(this.wordData)
-    //加载词频统计柱状图数据
-    this.getBarData(this.barData,this.xData)
-    //加载新闻分类饼状图数据
-    this.getPieData(this.pieData)
-    //加载新闻分类柱状图数据
-    this.getNewData(this.newData,this.newXData)
+    this.id = this.$route.query.id;
+
+    // 获取新闻数据并依次调用分类和分词接口
+    this.getNews().then(() => {
+      // 调用新闻分类接口
+      this.newsClassify().then(() => {
+        // 分类接口执行完后，调用分词接口
+        this.newsTokenize().then(() => {
+          // 所有接口执行完毕后渲染图表
+          this.getWordData(this.wordData);
+          this.getBarData(this.barData, this.xData);
+          this.getPieData(this.pieData);
+          this.getNewData(this.newData, this.newXData);
+        });
+      });
+    });
   }
 }
 </script>
@@ -366,30 +437,37 @@ export default {
 
 <style scoped lang="scss">
 .container_textarea {
-  margin-top: 5px; /* 距离上方15px */
-  margin-left: 10px; /* 距离左侧10px */
-  margin-right: 10px; /* 距离右侧10px */
-  padding: 5px; /* 可选：内容与容器边框的距离 */
+  margin-top: 5px;
+  /* 距离上方15px */
+  margin-left: 10px;
+  /* 距离左侧10px */
+  margin-right: 10px;
+  /* 距离右侧10px */
+  padding: 5px;
+  /* 可选：内容与容器边框的距离 */
 }
-.text_font{
+
+.text_font {
   //font-size: 20px;
   position: relative;
   font-family: SmileySans;
   padding: 2px;
 
 }
+
 .el-row {
   margin-bottom: 20px;
 }
+
 .el-row:last-child {
   margin-bottom: 0;
 }
+
 .el-col {
   border-radius: 4px;
 }
-.card{
+
+.card {
   width: 50%;
 }
-
-
 </style>
