@@ -45,4 +45,9 @@ public class NewsServiceImpl implements INewsService {
     public int update(News news) {
         return newsMapper.update(news);
     }
+
+    @Override
+    public int updateClickNum(int id, int click_num) {
+        return newsMapper.updateClickNum(id, click_num);
+    }
 }

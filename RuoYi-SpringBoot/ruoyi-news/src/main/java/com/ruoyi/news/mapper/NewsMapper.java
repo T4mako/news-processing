@@ -3,6 +3,7 @@ package com.ruoyi.news.mapper;
 import com.ruoyi.news.domain.News;
 import com.ruoyi.news.domain.NewsTable;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,4 +16,5 @@ public interface NewsMapper {
     public News findById(int id);
     public List<NewsTable> findAll();
     public int update(News news);
+    public int updateClickNum(@Param("id")int id,@Param("click_num")int click_num);
 }
