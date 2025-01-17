@@ -13,12 +13,31 @@ public class NewsTable {
     private String category;
     @JSONField(ordinal = 4)
     private String push_name;
+    @JSONField(ordinal = 5)
+    private int click_num;
 
     public NewsTable(String title, String time, String category, String push_name) {
         this.title = title;
         this.time = time;
         this.category = category;
         this.push_name = push_name;
+    }
+
+    public NewsTable(int id, String title, String time, String category, String push_name, int click_num) {
+        this.id = id;
+        this.title = title;
+        this.time = time;
+        this.category = category;
+        this.push_name = push_name;
+        this.click_num = click_num;
+    }
+
+    public int getClick_num() {
+        return click_num;
+    }
+
+    public void setClick_num(int click_num) {
+        this.click_num = click_num;
     }
 
     public NewsTable() {
@@ -72,6 +91,7 @@ public class NewsTable {
                 ", time='" + time + '\'' +
                 ", category='" + category + '\'' +
                 ", push_name='" + push_name + '\'' +
+                ", click_num=" + click_num +
                 '}';
     }
 }

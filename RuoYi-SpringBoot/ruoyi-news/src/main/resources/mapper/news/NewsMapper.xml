@@ -24,4 +24,8 @@
    <update id="update" parameterType="News">
       update news set title=#{title},content=#{content},time=#{time},update_time=#{update_time},category=#{category},push_name=#{push_name},click_num=#{click_num} where id=#{id}
    </update>
+
+   <update id="updateClickNum" parameterType="NewsTable">
+      update news set click_num=#{click_num} where id=#{id}
+   </update>
 </mapper>

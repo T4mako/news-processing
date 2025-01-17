@@ -69,6 +69,8 @@ public class NewsController {
         String sid=map.get("id");
         int id=Integer.parseInt(sid);
         News news=newsService.findById(id);
+        int click_num=news.getClick_num()+1;
+        int n=newsService.updateClickNum(id,click_num);
         String json = JSON.toJSONString(news);
         return json;
     }

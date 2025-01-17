@@ -3,19 +3,22 @@
     <ShowBox>
       <el-table :data="tableData.filter(data => !search || data.title.toLowerCase().includes(search.toLowerCase())
       ||data.push_name.toLowerCase().includes(search.toLowerCase())
-      ||data.category.toLowerCase().includes(search.toLowerCase()))" border style="width: 100%">
+      ||data.category.toLowerCase().includes(search.toLowerCase()))"
+      border style="width: 100%"
+      @row-click="findD">
         <el-table-column fixed label="新闻标题" prop="title" />
-        <el-table-column label="发布者" prop="push_name" />
-        <el-table-column label="标签" prop="category" />
-        <el-table-column label="发布日期" prop="time" />
+        <el-table-column label="发布者" prop="push_name" width="160"/>
+        <el-table-column label="标签" prop="category" width="140" />
+        <el-table-column label="发布日期" prop="time" :formatter="dateFormat" width="160"/>
+        <el-table-column label="热度" prop="click_num" width="100"/>
         <el-table-column align="center">
           <template #header>
-            <el-input v-model="search" placeholder="输入关键字搜索" />
+            <el-input v-model="search" placeholder="输入标题、发布者、分类搜索" />
           </template>
           <template #default="scope" >
             <el-button size="small" v-hasRole="['admin']" @click="findDetial(scope.row)">修改</el-button>
             <el-button size="small" v-hasRole="['admin']" type="danger" @click="deleteNews(scope.row)">删除</el-button>
-            <el-button size="small" type="primary" @click="findD(scope.row)">查看</el-button>
+            <el-button size="small" type="primary" @click="findD(scope.row)">查看详情</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -63,7 +66,7 @@
 <script>
 import ShowBox from "../../components/News/ShowBox";
 import {getAll,deleteNews,getNewsById,updateNews} from "../../api/news";
-
+import moment from 'moment'; // 引入 Moment.js
 export default {
   name: "index",
   components: {ShowBox},
@@ -71,10 +74,11 @@ export default {
     return{
       tableData:[],
       tableData2:[],
+      date: '',
       search: '',
       filterTableData:[],
       currentPage: 1, // 当前页码
-      pageSize: 8, // 每页显示数量
+      pageSize: 10, // 每页显示数量
       total: 0, // 总数据量
       dialogVisible: false,
       formData: {
@@ -87,6 +91,11 @@ export default {
     }
   },
   methods: {
+    //固定时间格式
+    dateFormat(row, column) {
+      return moment(row[column.time]).format('YYYY-MM-DD');
+    },
+
     //分页管理
     handleCurrentChange(page) {
       const startIndex = (page - 1) * this.pageSize
@@ -165,8 +174,6 @@ export default {
         }
       })
     },
-
-
   },
   mounted() {
    this.getNews();
