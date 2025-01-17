@@ -118,7 +118,7 @@ public class ProcessController {
         // 解析响应
         if (response.isOk()) {
             JSONObject responseJson = JSONUtil.parseObj(response.body());
-            return responseJson; // 假设返回的JSON中有"prediction"字段
+            return responseJson;
         } else {
             return null; // 请求失败时返回未知分类
         }
