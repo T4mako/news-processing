@@ -14,7 +14,7 @@ from sklearn import metrics
 from cnn_model import TCNNConfig, TextCNN  # 修改为 CNN 模型
 from data.cnews_loader import read_vocab, read_category, batch_iter, process_file, build_vocab
 
-base_dir = 'D:\\code\\text-classification-cnn-rnn-master\\helper\\data\\cnews'
+base_dir = './helper/data/cnews'
 train_dir = os.path.join(base_dir, 'cnews.train.txt')
 test_dir = os.path.join(base_dir, 'cnews.test.txt')
 val_dir = os.path.join(base_dir, 'cnews.val.txt')
@@ -124,8 +124,8 @@ def train():
             break
 
     # 训练结束后手动保存最终模型
-    model.save_weights('D:\\code\\text-classification-cnn-rnn-master\\checkpoints\\textcnn\\final_model.weights.h5')  # 保存权重
-    model.save('D:\\code\\text-classification-cnn-rnn-master\\checkpoints\\textcnn\\final_model.keras')  # 保存整个模型
+    model.save_weights('./checkpoints/textcnn/final_model.weights.h5')  # 保存权重
+    model.save('./checkpoints/textcnn/final_model.keras')  # 保存整个模型
 
 
 def test():
@@ -135,7 +135,7 @@ def test():
 
     # 加载模型
     model = tf.keras.models.load_model(
-        'D:\\code\\text-classification-cnn-rnn-master\\checkpoints\\textcnn\\final_model.keras',
+        './checkpoints/textcnn/final_model.keras',
         custom_objects={'TextCNN': TextCNN}  # 确保 TextCNN 类被正确加载
     )
 

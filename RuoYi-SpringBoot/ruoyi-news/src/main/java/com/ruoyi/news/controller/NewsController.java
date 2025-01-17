@@ -1,5 +1,9 @@
 package com.ruoyi.news.controller;
 
+import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpResponse;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.ruoyi.news.domain.News;
 import com.ruoyi.news.domain.NewsTable;
@@ -35,17 +39,31 @@ public class NewsController {
 
     @ResponseBody
     @RequestMapping("/news/insertNews")
-    public String insert(@RequestBody Map<String,String> map) {
-        String title= map.get("title");
-        String content= map.get("content");
-        String time= map.get("time");
-        String push=map.get("push_name");
-        News news=new News(title,content,time,push);
-        int n=newsService.insert(news);
+    public String insert(@RequestBody Map<String, String> map) {
+        String title = map.get("title");
+        String content = map.get("content");
+        String time = map.get("time");
+        String push = map.get("push_name");
+
+        // 调用分类方法，获取分类结果
+        JSONObject classificationResult = classify(content);
+        String category = ""; // 默认分类
+
+        if (classificationResult != null && classificationResult.containsKey("prediction")) {
+            category = classificationResult.getStr("prediction"); // 获取预测的分类
+        }
+
+        // 创建新闻对象并设置分类
+        News news = new News(title, content, time, push);
+        news.setCategory(category); // 设置分类
+
+        // 插入新闻
+        int n = newsService.insert(news);
         System.out.println(n);
-        if(n==1){
+
+        if (n == 1) {
             return "success";
-        }else {
+        } else {
             return "fail";
         }
     }
@@ -104,6 +122,26 @@ public class NewsController {
         // 将日期转换为字符串
         String dateString = currentDate.format(formatter);
         return dateString;
+    }
+
+    // 分类逻辑
+    private JSONObject classify(String text) {
+        // 构建请求体
+        JSONObject json = new JSONObject();
+        json.set("text", text);
+
+        // 发送POST请求到分类服务
+        HttpResponse response = HttpRequest.post("http://127.0.0.1:5000/predict")
+                .body(json.toString())
+                .execute();
+
+        // 解析响应
+        if (response.isOk()) {
+            JSONObject responseJson = JSONUtil.parseObj(response.body());
+            return responseJson;
+        } else {
+            return null; // 请求失败时返回null
+        }
     }
 
 }
