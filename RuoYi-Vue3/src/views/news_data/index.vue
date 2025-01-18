@@ -28,14 +28,8 @@
         </el-col>
         <el-col :span="22">
 
-          <el-input
-              v-model="formData.content"
-              style="width: 100%"
-              :autosize="{ minRows: 2, maxRows: 15 }"
-              type="textarea"
-              placeholder="Please input"
-              readonly
-          />
+          <el-input v-model="formData.content" style="width: 100%" :autosize="{ minRows: 2, maxRows: 15 }"
+            type="textarea" placeholder="Please input" readonly />
 
         </el-col>
       </el-row>
@@ -158,12 +152,9 @@ export default {
         },
         series: [
           {
-            //用来调整词之间的距离
-            gridSize: 20,
-            //用来调整字的大小范围
-            sizeRange: [18, 40],
-            //用来调整词的旋转方向，，[0,0]--代表着没有角度，也就是词为水平方向
-            rotationRange: [0, 0],
+            gridSize: 20, // 调整词之间的距离
+            sizeRange: [18, 40], // 调整字的大小范围
+            rotationRange: [0, 0], // 调整词的旋转方向
             type: 'wordCloud',
             size: ['95%', '95%'],
             textRotation: [0, 95],
@@ -172,19 +163,16 @@ export default {
               enable: true,
               minSize: 14
             },
-            //全局文本样式
+            // 全局文本样式
             textStyle: {
               normal: {
-                // Color可以是一个回调函数或一个颜色字符串
+                // 使用回调函数生成多种颜色
                 color: function () {
-                  const color = `rgb(${[
-                    Math.round(Math.random() * 160),
-                    Math.round(Math.random() * 160),
-                    Math.round(Math.random() * 160),
-                  ].join(",")})`;
-                  console.log("颜色生成")
-                  console.log("Generated Color:", color); // 打印生成的颜色
-                  return color;
+                  // 随机生成 RGB 颜色
+                  const r = Math.round(Math.random() * 255);
+                  const g = Math.round(Math.random() * 255);
+                  const b = Math.round(Math.random() * 255);
+                  return `rgb(${r}, ${g}, ${b})`;
                 },
               },
               // 移入文本效果
@@ -196,24 +184,27 @@ export default {
             data: wordData,
           },
         ],
-      }
+      };
     },
     //获取词频统计柱状图
     getBarData(barData, xData) {
+      // 只取前15个数据
+      const truncatedBarData = barData.slice(0, 15);
+      const truncatedXData = xData.slice(0, 15);
+
       this.barOptions = {
         title: {
           text: '词频统计'
         },
         tooltip: {},
         grid: {
-          bottom: '5%' // 柱状图距离容器底部的距离
+          bottom: '15%' // 增加底部空间以显示词
         },
         xAxis: {
           type: 'category',
-          data: xData,
+          data: truncatedXData,
           axisLabel: {
-            inside: true,
-            color: '#fff'
+            show: false // 隐藏x轴标签
           },
           axisTick: {
             show: false
@@ -256,7 +247,16 @@ export default {
                 ])
               }
             },
-            data: barData,
+            data: truncatedBarData,
+            label: {
+              show: true,
+              position: 'bottom', // 将标签放在柱子下面
+              color: '#666', // 深灰色
+              fontSize: 12,
+              formatter: function (params) {
+                return truncatedXData[params.dataIndex]; // 显示对应的词
+              }
+            }
           }
         ]
       }
@@ -381,7 +381,7 @@ export default {
             this.pieData = labels.map((label, index) => {
               return { value: probabilities[index] * 100, name: label };
             });
-            
+
             resolve();  // 分类接口执行完成后，resolve
           } else {
             reject('分类接口出错');
@@ -397,17 +397,17 @@ export default {
       return new Promise((resolve, reject) => {
         tokenize(this.formData.content).then(response => {
           console.log(response);
-          
+
           if (response.code === 200) {
             const wordData = [];
             const data = response.data;
 
             const topWords = Object.entries(data).slice(0, 20);
-            topWords.forEach(([name,value ]) => {
-              wordData.push({ name,value });
+            topWords.forEach(([name, value]) => {
+              wordData.push({ name, value });
             });
-            this.xData = topWords.map(([name,value]) => name);
-            this.barData = topWords.map(([name,value]) => value);
+            this.xData = topWords.map(([name, value]) => name);
+            this.barData = topWords.map(([name, value]) => value);
 
             this.wordData = wordData;  // 更新词云数据
             resolve();  // 分词接口执行完成后，resolve

@@ -93,7 +93,7 @@ export default {
   methods: {
     //固定时间格式
     dateFormat(row, column) {
-      return moment(row[column.time]).format('YYYY-MM-DD');
+      return moment(row[column.property]).format('YYYY-MM-DD');
     },
 
     //分页管理

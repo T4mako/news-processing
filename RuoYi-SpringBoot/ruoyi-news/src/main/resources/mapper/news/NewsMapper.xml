@@ -19,7 +19,7 @@
    </select>
 
    <select id="findAll" resultType="NewsTable">
-      select * from news
+      select * from news order by time desc,click_num desc
    </select>
    <update id="update" parameterType="News">
       update news set title=#{title},content=#{content},time=#{time},update_time=#{update_time},category=#{category},push_name=#{push_name},click_num=#{click_num} where id=#{id}
