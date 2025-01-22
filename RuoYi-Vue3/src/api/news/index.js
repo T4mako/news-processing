@@ -71,10 +71,20 @@ export function classify(t){
     })
 }
 
-// 根据分词
+// 词频统计
+// export function tokenize(t){
+//     return request({
+//         url: '/news/tokenize',
+//         method: 'post',
+//         data:{
+//             text:t
+//         }
+//     })
+// }
+
 export function tokenize(t){
     return request({
-        url: '/news/tokenize',
+        url: '/wordcount',
         method: 'post',
         data:{
             text:t

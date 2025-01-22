@@ -398,9 +398,9 @@ export default {
         tokenize(this.formData.content).then(response => {
           console.log(response);
 
-          if (response.code === 200) {
+          
             const wordData = [];
-            const data = response.data;
+            const data = response;
 
             const topWords = Object.entries(data).slice(0, 20);
             topWords.forEach(([name, value]) => {
@@ -411,9 +411,6 @@ export default {
 
             this.wordData = wordData;  // 更新词云数据
             resolve();  // 分词接口执行完成后，resolve
-          } else {
-            reject('分词接口出错');
-          }
         }).catch(error => {
           reject(error);  // 处理分词接口的错误
         });
