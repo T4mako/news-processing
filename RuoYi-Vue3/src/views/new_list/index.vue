@@ -4,8 +4,7 @@
       <el-table :data="tableData.filter(data => !search || data.title.toLowerCase().includes(search.toLowerCase())
       ||data.push_name.toLowerCase().includes(search.toLowerCase())
       ||data.category.toLowerCase().includes(search.toLowerCase()))"
-      border style="width: 100%"
-      @row-click="findD">
+      border style="width: 100%">
         <el-table-column fixed label="新闻标题" prop="title" />
         <el-table-column label="发布者" prop="push_name" width="160"/>
         <el-table-column label="标签" prop="category" width="140" />
